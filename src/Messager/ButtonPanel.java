@@ -5,12 +5,25 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import com.zehon.FileTransferStatus;
+import com.zehon.exception.FileTransferException;
+import com.zehon.ftp.FTP;
 
 /*
  * ========================= PROJECT INFORMATION  ============================
@@ -47,6 +60,7 @@ public class ButtonPanel extends JPanel {
 	static JButton downloadButton = new JButton();
 	static JPanel bPanel = new JPanel();
 	static OutScreen out = new OutScreen();
+	static MenuBar conInfo = new MenuBar();
 	
 	// SUB EDIT FRAME
 	static JFrame editFrame = new JFrame();
@@ -125,23 +139,125 @@ public class ButtonPanel extends JPanel {
 	             new ActionListener(){
 	                 public void actionPerformed(
 	                         ActionEvent e){
-	                	 					
-	                	 					System.out.println("NOT SET UP YET, CHILL");
+	                	 
+	                	 
+	                	 // SAVE TEXT TO FILE
+	                	 try {
+	                		 
+	             			String content = out.getOutput();
+	              
+	             			File file = new File("upload.txt");
+	              
+	             			// if file doesnt exists, then create it
+	             			if (!file.exists()) {
+	             				file.createNewFile();
+	             			}
+	              
+	             			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+	             			BufferedWriter bw = new BufferedWriter(fw);
+	             			bw.write(content);
+	             			bw.close();
+	              
+	             			System.out.println("Done writing...");
+	              
+	             		} catch (IOException e2) {
+	             			e2.printStackTrace();
+	             		}
+	                	 
+	                	 // PUBLISH TO FTP SERVER
+	                	 String iAddress = conInfo.getAddress();
+	                	 String iUsername = conInfo.getUsername();
+	                	 String iPassword = conInfo.getPassword();
+	                	 String host = iAddress;
+	             		String username = iUsername;
+	             		String password = iPassword;
+	             		String destFolder = "/test";
+	             		try {
+	             			
+	             			// Upload Download Folder
+	             			String filePath = "upload.txt";
+	             			int status = FTP.sendFile(filePath, destFolder, host, username, password);
+	             			if(FileTransferStatus.SUCCESS == status){
+	             				JOptionPane.showMessageDialog(null, "Successful Upload");
+	             				System.out.println(filePath + " got sftp-ed successfully to  folder "+destFolder);
+	             				
+	             				// Archive Folder
+	             				// to be implemented
+	             				
+	             			}
+	             			else if(FileTransferStatus.FAILURE == status){
+	             				System.out.println("Fail to ssftp  to  folder "+destFolder);
+	             				JOptionPane.showMessageDialog(null, "ERROR: Could not Upload. Check your Information.");
+	             			}
+	             		} catch (FileTransferException e1) {
+	             			e1.printStackTrace();
+	             		}
 	                	 					
 	                                       }
 	                                 }
 	                         );
 		
 		downloadButton.addActionListener(
-	             new ActionListener(){
-	                 public void actionPerformed(
-	                         ActionEvent e){
-	                	 					
-	                	 					System.out.println("NOT SET UP YET, CHILL");
-	                	 					
-	                                       }
-	                                 }
-	                         );
+				new ActionListener(){
+					public void actionPerformed(
+							ActionEvent e){
+						String iAddress = conInfo.getAddress();
+						String iUsername = conInfo.getUsername();
+						String iPassword = conInfo.getPassword();
+						String host = iAddress;
+						String username = iUsername;
+						String password = iPassword;	
+						String sftpFolder = "/test";
+
+						String writeToLocalFolder = "";
+						String nameOfFile = "upload.txt";
+						try {
+							int status = FTP.getFile(nameOfFile, sftpFolder, host, username, password, writeToLocalFolder);
+							if(FileTransferStatus.SUCCESS == status){
+								System.out.println(nameOfFile + " got downloaded successfully to  folder "+writeToLocalFolder);
+							}
+							else if(FileTransferStatus.FAILURE == status){
+								System.out.println("Fail to download  to  folder "+writeToLocalFolder);
+							}
+						} catch (FileTransferException e5) {
+							e5.printStackTrace();
+						}
+
+						// Open downloaded File
+						
+						try {
+							BufferedReader br = new BufferedReader(new FileReader("upload.txt"));
+							StringBuilder sb = new StringBuilder();
+							String line = br.readLine();
+
+							while (line != null) {
+								sb.append(line);
+								sb.append("\n");
+								line = br.readLine();
+							}
+							out.setOutput(sb.toString());
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} finally {
+							BufferedReader br = null;
+							try {
+								br = new BufferedReader(new FileReader("upload.txt"));
+							} catch (FileNotFoundException e1) {
+								// TODO Auto-generated catch block
+								//e1.printStackTrace();
+							}
+							try {
+								br.close();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								//e1.printStackTrace();
+							}
+						}
+
+				}
 	}
+				);
+}
 
 }

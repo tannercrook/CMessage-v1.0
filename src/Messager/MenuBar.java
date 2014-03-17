@@ -58,6 +58,10 @@ public class MenuBar extends JMenuBar{
     static JTextField username = new JTextField(40);
     static JTextField password = new JTextField(40);
     static JButton doneButton = new JButton();
+    
+    static String dbAddress;
+    static String dbUsername;
+    static String dbPassword;
 	
 	
 	void buildBar()
@@ -137,7 +141,9 @@ public class MenuBar extends JMenuBar{
 			   	                         ActionEvent e){
 			   	                	 					
 			   	                	 					// CONNECT
-			   	                	 					System.out.println("Not set up yet, Chill");
+			   	                	 					dbAddress = database.getText();
+			   	                	 					dbUsername = username.getText();
+			   	                	 					dbPassword = password.getText();
 			   	                	 					// Kill the frame
 			   	                	 					setUpFrame.setVisible(false);
 			   	                	 					setUpFrame.dispose();
@@ -162,6 +168,21 @@ public class MenuBar extends JMenuBar{
 
 			        } // End of actionPerformed method.
 			      }); // End of menuItemNew action listener
+	}
+	
+	public String getAddress()
+	{
+		return dbAddress;
+	}
+	
+	public String getUsername()
+	{
+		return dbUsername;
+	}
+	
+	public String getPassword()
+	{
+		return dbPassword;
 	}
 	
 }
