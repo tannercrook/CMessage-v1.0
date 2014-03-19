@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="/ftpTry/zehon_sftp-1.1/commons-vfs-2.0.jar"/>
 	<classpathentry kind="lib" path="/ftpTry/zehon_sftp-1.1/jsch-0.1.41.jar"/>
 	<classpathentry kind="lib" path="/ftpTry/zehon_sftp-1.1/zehon_file_transfer-1.1.6.jar"/>
+	<classpathentry kind="lib" path="/ftpTry/bin/jasypt-1.9.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

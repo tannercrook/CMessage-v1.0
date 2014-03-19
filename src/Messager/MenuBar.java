@@ -40,6 +40,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 
@@ -51,6 +52,7 @@ public class MenuBar extends JMenuBar{
 	
 	private JMenuItem menuItemSaveAs  = new JMenuItem("Save As");
 	private JMenuItem menuItemSetUp = new JMenuItem("Connect");
+	private JMenuItem menuItemSetKey = new JMenuItem("Set Key");
 	
 	// New Window for Setup
     static JFrame setUpFrame = new JFrame();
@@ -62,6 +64,9 @@ public class MenuBar extends JMenuBar{
     static String dbAddress;
     static String dbUsername;
     static String dbPassword;
+    
+    // Set Key
+    ButtonPanel keySetter = new ButtonPanel();
 	
 	
 	void buildBar()
@@ -76,7 +81,7 @@ public class MenuBar extends JMenuBar{
 		menuItemSaveAs.setMnemonic('A');
 
 
-		// FILE MENU 
+		// Connect Menu 
 		// --------------------------------------------------------
 		add(connection);
 		connection.setMnemonic('C');
@@ -84,6 +89,9 @@ public class MenuBar extends JMenuBar{
 		// Save As Selection
 		connection.add(menuItemSetUp);
 		menuItemSetUp.setMnemonic('S');
+		
+		connection.add(menuItemSetKey);
+		menuItemSetUp.setMnemonic('K');
 		
 		// HELP MENU
 		//---------------------------------------------------------
@@ -168,6 +176,18 @@ public class MenuBar extends JMenuBar{
 
 			        } // End of actionPerformed method.
 			      }); // End of menuItemNew action listener
+		 
+		 menuItemSetKey.addActionListener(
+			      new ActionListener()
+			      {
+			        public void actionPerformed(ActionEvent e)
+			        {
+			          // New file.
+			          String newKey = JOptionPane.showInputDialog("Enter Encryption Key");
+			          keySetter.setNewKey(newKey);
+
+			        } // End of actionPerformed method.
+			      }); // 
 	}
 	
 	public String getAddress()

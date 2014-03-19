@@ -21,6 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
+import org.jasypt.util.text.BasicTextEncryptor;
+
 import com.zehon.FileTransferStatus;
 import com.zehon.exception.FileTransferException;
 import com.zehon.ftp.FTP;
@@ -68,10 +71,38 @@ public class ButtonPanel extends JPanel {
 	static JScrollPane scrollPane = new JScrollPane(editSpace);
 	static JButton doneButton = new JButton();
 	
+	
+	// Text Encryption and Decryption
+	
+	
+	static String key = "na";
+	
+	
+	/*
+	 * A KEY IS REQUIRED FOR THE PROPER ENCRYPTION AND DECRYPTION OF TEXT.
+	 * THIS IS THE METHOD THAT SETS THAT KEY. IT IS CALLED EVERYTIME A USER
+	 * IS ASKED TO INPUT A KEY. IT IS ALSO CALLED DURING THE BUILD BUTTON
+	 * PANEL METHOD.
+	 */
+	
+	
+	public void setNewKey(String aKey)
+	{
+		key = aKey;
+		
+	}
+	
+	/*
+	 * MAIN BUILDER FOR THIS FILE. THIS PUTS EVERYTHING TOGETHER.
+	 */
 	public void buildButtonPanel()
 	{
+		
+		
+		// SET LISTENERS FOR BUTTON PANEL BUTTONS
 		setListeners();
 		
+		// MAKE BUTTONS
 		editButton.setText("Edit in Larger Window");
 		add(editButton);
 		
@@ -83,6 +114,11 @@ public class ButtonPanel extends JPanel {
 		
 	}
 	
+	/*
+	 *  THIS IS THE BUILDER FOR THE 'EDIT' WINDOW. IT MAKES AN ENTIRELY NEW
+	 *  FRAME FOR THE USER TO MANIPULATE... THIS MAY OR MAY NOT BE INCLUDED
+	 *  IN THE FINAL VERSION OF THIS APP.
+	 */
 	void buildSubFrame()
 	{
 		
@@ -130,6 +166,7 @@ public class ButtonPanel extends JPanel {
 	             new ActionListener(){
 	                 public void actionPerformed(
 	                         ActionEvent e){
+	                	 // BUILDS NEW FRAME
 	                	 					buildSubFrame();
 	                                       }
 	                                 }
@@ -141,10 +178,39 @@ public class ButtonPanel extends JPanel {
 	                         ActionEvent e){
 	                	 
 	                	 
-	                	 // SAVE TEXT TO FILE
+	                	 /*
+	                	  * SORRY FELLAS(). THIS IS A CRAZY METHOD... 
+	                	  * 
+	                	  * IT IS THE ACTION LISTENER FOR THE PUBLISH BUTTON(pushes text to ftp).
+	                	  * 
+	                	  * IT OPERATES IN THESE STEPS..
+	                	  * 
+	                	  * 1. CHECKS TO SEE IF KEY HAS BEEN SET, IF(not){SET KEY}.
+	                	  * 2. ENCRYPTS THE TEXT USING THE KEY.
+	                	  * 3. SAVES FILE TO APP ROOT <DIR> AS "upload.txt".
+	                	  * 4. PUSHES FILE TO FTP SERVER USING USER SET CONNECTION INFO.
+	                	  * 
+	                	  * 
+	                	  * I really do feel bad about this one....
+	                	  * 
+	                	  * If you need help understanding what is going on feel free 
+	                	  * to contact me. 
+	                	  * 
+	                	  */
 	                	 try {
 	                		 
+	                		 BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+	                		 
+	                		 
+	                		 if(key.equals("na"))
+	                		 {
+	                			 key = JOptionPane.showInputDialog("Enter Encryption Key");
+	                		 }
+	                		 
+	                		 textEncryptor.setPassword(key);
+	                		 
 	             			String content = out.getOutput();
+	             			String encryptedText = textEncryptor.encrypt(content);
 	              
 	             			File file = new File("upload.txt");
 	              
@@ -155,7 +221,7 @@ public class ButtonPanel extends JPanel {
 	              
 	             			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 	             			BufferedWriter bw = new BufferedWriter(fw);
-	             			bw.write(content);
+	             			bw.write(encryptedText);
 	             			bw.close();
 	              
 	             			System.out.println("Done writing...");
@@ -197,6 +263,20 @@ public class ButtonPanel extends JPanel {
 	                                 }
 	                         );
 		
+		
+		/*
+		 * 
+		 * 
+		 * ABOUT AS CRAZY AS THE PUBLISH BUTTON. THIS IS GOING TO:
+		 * 
+		 * 1. DOWNLOAD FILE FROM FTP SERVER
+		 * 2. READ INFO FROM IT. **REMEMBER INFO IS ENCRYPTED**
+		 * 3. CHECKS FOR KEY TO DECRYPT.
+		 * 4. DECRYPTS THE INFO USING KEY.
+		 * 5. DISPLAYS THE DECRYPTED INFORMATION.
+		 * 
+		 * 
+		 */
 		downloadButton.addActionListener(
 				new ActionListener(){
 					public void actionPerformed(
@@ -218,6 +298,7 @@ public class ButtonPanel extends JPanel {
 							}
 							else if(FileTransferStatus.FAILURE == status){
 								System.out.println("Fail to download  to  folder "+writeToLocalFolder);
+								JOptionPane.showMessageDialog(null, "ERROR: Could not download.");
 							}
 						} catch (FileTransferException e5) {
 							e5.printStackTrace();
@@ -235,7 +316,35 @@ public class ButtonPanel extends JPanel {
 								sb.append("\n");
 								line = br.readLine();
 							}
-							out.setOutput(sb.toString());
+							
+							// INFORMATION FROM FILE **ENCRYPTED**
+							String encContent = sb.toString();
+							
+							
+							// CHECK FOR SESSION KEY
+							if(key.equals("na"))
+	                		 {
+	                			 key = JOptionPane.showInputDialog("Enter Encryption Key");
+	                		 }
+							
+							BasicTextEncryptor textDecryptor = new BasicTextEncryptor();
+							
+							textDecryptor.setPassword(key);
+							
+							// DECRYPT THE INFORMATION
+							try
+							{
+							String plainText = textDecryptor.decrypt(encContent);
+							out.setOutput(plainText);
+							}
+							catch(EncryptionOperationNotPossibleException p)
+							{
+								JOptionPane.showMessageDialog(null, "Error: Could not decrypt. "
+										+ "Perhaps your key is wrong?");
+								System.out.println("ERROR: DECRYPTION ERROR::Most likely wrong key");
+							}
+							
+							
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
