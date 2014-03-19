@@ -234,10 +234,11 @@ public class ButtonPanel extends JPanel {
 	                	 String iAddress = conInfo.getAddress();
 	                	 String iUsername = conInfo.getUsername();
 	                	 String iPassword = conInfo.getPassword();
+	                	 String iFolder = conInfo.getFolder();
 	                	 String host = iAddress;
 	             		String username = iUsername;
 	             		String password = iPassword;
-	             		String destFolder = "/test";
+	             		String destFolder = ("/" + iFolder);
 	             		try {
 	             			
 	             			// Upload Download Folder
@@ -284,10 +285,11 @@ public class ButtonPanel extends JPanel {
 						String iAddress = conInfo.getAddress();
 						String iUsername = conInfo.getUsername();
 						String iPassword = conInfo.getPassword();
+						String iFolder = conInfo.getFolder();
 						String host = iAddress;
 						String username = iUsername;
 						String password = iPassword;	
-						String sftpFolder = "/test";
+						String sftpFolder = ("/" + iFolder);
 
 						String writeToLocalFolder = "";
 						String nameOfFile = "upload.txt";

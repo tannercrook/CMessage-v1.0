@@ -41,6 +41,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
@@ -58,12 +59,14 @@ public class MenuBar extends JMenuBar{
     static JFrame setUpFrame = new JFrame();
     static JTextField database = new JTextField(40);
     static JTextField username = new JTextField(40);
-    static JTextField password = new JTextField(40);
+    static JPasswordField password = new JPasswordField(40);
+    static JTextField folder = new JTextField(40);
     static JButton doneButton = new JButton();
     
-    static String dbAddress;
-    static String dbUsername;
-    static String dbPassword;
+    static String dbAddress = "Address..";
+    static String dbUsername = "Username..";
+    static String dbPassword = "Password";
+    static String dbFolder = "default";
     
     // Set Key
     ButtonPanel keySetter = new ButtonPanel();
@@ -126,19 +129,23 @@ public class MenuBar extends JMenuBar{
 			        	
 			          
 			        	
-			        	database.setText("Database Address...");
+			        	database.setText(dbAddress);
 			        	JLabel dbLabel = new JLabel();
 			        	dbLabel.setText("Database:");
 			        	
 			        	
-			        	username.setText("Username...");
+			        	username.setText(dbUsername);
 			        	JLabel usrLabel = new JLabel();
 			        	usrLabel.setText("Username:");
 			        	
 			        	
-			        	password.setText("Password...");
+			        	password.setText(dbPassword);
 			        	JLabel passLabel = new JLabel();
 			        	passLabel.setText("Password:");
+			        	
+			        	folder.setText(dbFolder);
+			        	JLabel projLabel = new JLabel();
+			        	projLabel.setText("Project");
 			        	
 			        	
 			        	doneButton.setText("Connect");
@@ -152,6 +159,7 @@ public class MenuBar extends JMenuBar{
 			   	                	 					dbAddress = database.getText();
 			   	                	 					dbUsername = username.getText();
 			   	                	 					dbPassword = password.getText();
+			   	                	 					dbFolder = folder.getText();
 			   	                	 					// Kill the frame
 			   	                	 					setUpFrame.setVisible(false);
 			   	                	 					setUpFrame.dispose();
@@ -166,12 +174,14 @@ public class MenuBar extends JMenuBar{
 			        	setUpFrame.add(username);
 			        	setUpFrame.add(passLabel);
 			        	setUpFrame.add(password);
+			        	setUpFrame.add(projLabel);
+			        	setUpFrame.add(folder);
 			        	setUpFrame.add(doneButton);
 			        	
 			        	
 			          setUpFrame.setTitle("Set Up Connection");
 			          setUpFrame.setLayout(new FlowLayout());
-			          setUpFrame.setSize(600, 200);
+			          setUpFrame.setSize(600, 250);
 			          setUpFrame.setVisible(true);
 
 			        } // End of actionPerformed method.
@@ -205,6 +215,10 @@ public class MenuBar extends JMenuBar{
 		return dbPassword;
 	}
 	
+	public String getFolder()
+	{
+		return dbFolder;
+	}
 }
 
 
