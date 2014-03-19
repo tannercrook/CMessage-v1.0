@@ -52,6 +52,7 @@ public class CFrame extends JFrame {
 	static MenuBar menuBar = new MenuBar();
 	static OutScreen outScreen = new OutScreen();
 	static ButtonPanel buttonPanel = new ButtonPanel();
+	
 
 	
 	public static void main(String[] args) {
@@ -85,7 +86,7 @@ public class CFrame extends JFrame {
 		setTitle("CMessager");
 		setLayout(new BorderLayout());
 		frame.setJMenuBar(menuBar);
-		setSize(600, 400);
+		setSize(1000, 600);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	

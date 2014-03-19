@@ -1,6 +1,7 @@
 package Messager;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -8,6 +9,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
 
 
 /*
@@ -43,32 +47,80 @@ public class OutScreen{
 	static JTextArea outString = new JTextArea();
 	static JScrollPane scrollPane = new JScrollPane(outString);
 
-	
-	
+	private static JTextArea lines;
+
+
+
 	public void buildScreen()
 	{
 		outString.setLineWrap( true );
-	    outString.setWrapStyleWord( true );
-	    //outString.setEditable(false);
-	    
-	    //scrollPane.setPreferredSize(new Dimension(450, 50));
-	    scrollPane.setPreferredSize(new Dimension(200, 100));
+		outString.setWrapStyleWord( true );
+		//outString.setEditable(false);
+
+		//scrollPane.setPreferredSize(new Dimension(450, 50));
+		scrollPane.setPreferredSize(new Dimension(200, 100));
+
+
+		/*
+		 * BUILDS LINE NUMBERS ----------- FROM HERE TO END OF FILE.
+		 * 
+		 * UML PEOPLE NEED PAY NO ATTENTION HERE. NOTHING IS HAPPENING.
+		 */
+		lines = new JTextArea("1");
+
+		Color linesColor = new Color(175,238,238);
+		lines.setBackground(linesColor);
+		lines.setEditable(false);
+
+		outString.getDocument().addDocumentListener(new DocumentListener(){
+			public String getText(){
+				int caretPosition = outString.getDocument().getLength();
+				Element root = outString.getDocument().getDefaultRootElement();
+				String text = "1" + System.getProperty("line.separator");
+				for(int i = 2; i < root.getElementIndex( caretPosition ) + 2; i++){
+					text += i + System.getProperty("line.separator");
+				}
+				return text;
+			}
+			@Override
+			public void changedUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent de) {
+				lines.setText(getText());
+			}
+
+		});
+		
+		scrollPane.getViewport().add(outString);
+		scrollPane.setRowHeaderView(lines);
+
 
 	}
-	
+
 	public JScrollPane getScrollPane()
 	{
 		return scrollPane;
 	}
-	
+
 	public void setOutput(String toOutput)
 	{
 		outString.setText(toOutput);
 	}
-	
+
 	public String getOutput()
 	{
 		return outString.getText();
 	}
 
+	
 }
+
+
