@@ -1,0 +1,40 @@
+CMESSAGE
+
+
+A User Guide
+
+
+
+Getting Started.
+
+CMessage is an application built to help users share and store their code securely. Friends, colleagues and groups will now be able to effectively collaborate and store code with ease.
+
+To get started, simply open the application and on the top menu select:
+
+			Connection > Connect
+
+A window will appear prompting the user to input some information. Address is the address
+of the FTP server you are using (If you do not know your FTP address contact your server
+administrator). Enter your correct username and password.
+
+Now you will be able to write in the screen and publish to your server! When you are ready to 
+do so simply press the Publish button at the bottom of the application screen. It will prompt 
+you to enter an encryption key if you have not already done so. Enter the password you wish
+to use to encrypt your information. After you have entered the key, the application will push the information to the server and notify you of a successful upload.
+
+If you wish to set a different key, from the top menu select:
+
+			Connection > Set Key
+
+This will prompt the users for a key and will set the encrypt and decrypt key.
+
+Troubleshooting.
+
+Common Errors:
+
+	File won’t upload - Check FTP information.
+	Decryption Error - Make sure you have the correct password to decrypt.
+
+
+
+

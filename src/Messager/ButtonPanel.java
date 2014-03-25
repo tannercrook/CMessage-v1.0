@@ -103,8 +103,8 @@ public class ButtonPanel extends JPanel {
 		setListeners();
 		
 		// MAKE BUTTONS
-		editButton.setText("Edit in Larger Window");
-		add(editButton);
+		//editButton.setText("Edit in Larger Window");
+		//add(editButton);
 		
 		publishButton.setText("Publish");
 		add(publishButton);

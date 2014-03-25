@@ -30,9 +30,14 @@
 
 
 package Messager;
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -42,6 +47,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
@@ -54,6 +61,7 @@ public class MenuBar extends JMenuBar{
 	private JMenuItem menuItemSaveAs  = new JMenuItem("Save As");
 	private JMenuItem menuItemSetUp = new JMenuItem("Connect");
 	private JMenuItem menuItemSetKey = new JMenuItem("Set Key");
+	private JMenuItem menuItemGuide = new JMenuItem("User Guide");
 	
 	// New Window for Setup
     static JFrame setUpFrame = new JFrame();
@@ -100,6 +108,8 @@ public class MenuBar extends JMenuBar{
 		//---------------------------------------------------------
 		add(help);
 		help.setMnemonic('H');
+		
+		help.add(menuItemGuide);
 		
 		
 		
@@ -198,6 +208,42 @@ public class MenuBar extends JMenuBar{
 
 			        } // End of actionPerformed method.
 			      }); // 
+		 
+		 
+		 // HELP WINDOW
+		 menuItemGuide.addActionListener(
+				 new ActionListener()
+				 {
+					 public void actionPerformed(ActionEvent e)
+					 {
+						 // Make Components
+						 JFrame helpFrame = new JFrame();
+						 JScrollPane helpPane = new JScrollPane();
+						 JTextArea helpArea = new JTextArea();
+						 
+						 // Customize Text Area
+						 helpArea.setEditable(false);
+						 helpArea.setWrapStyleWord(true);
+						 helpArea.setLineWrap(true);
+						 
+						 // Set the Text - calls to function below
+						 helpArea.setText(getHelpText());
+						 
+						 // Add TextArea to Pane
+						 helpPane.getViewport().add(helpArea);
+						 
+						 // Add Pane to Frame
+						 helpFrame.add(helpPane);
+						 
+						 // Initialize Frame
+						 helpFrame.setTitle("Help");
+						 helpFrame.setSize(800, 600);
+						 helpFrame.setLocationRelativeTo(null);
+						 helpFrame.setVisible(true);
+						 
+					 }
+				 });
+		 
 	}
 	
 	public String getAddress()
@@ -218,6 +264,46 @@ public class MenuBar extends JMenuBar{
 	public String getFolder()
 	{
 		return dbFolder;
+	}
+	
+	private String getHelpText()
+	{
+		
+		String helpTxt = "Something went Wrong";
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("help.txt"));
+			StringBuilder sb = new StringBuilder();
+			String line = br.readLine();
+
+			while (line != null) {
+				sb.append(line);
+				sb.append("\n");
+				line = br.readLine();
+			}
+			
+			helpTxt = sb.toString();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} finally {
+			BufferedReader br = null;
+			try {
+				br = new BufferedReader(new FileReader("help.txt"));
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				//e1.printStackTrace();
+			}
+			try {
+				br.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				//e1.printStackTrace();
+			}
+		}
+		
+		return helpTxt;
 	}
 }
 

@@ -19,7 +19,7 @@ import Messager.OutScreen;
  * 
  * THIS APPLICATION IS FOR BYU-IDAHO CIT262 SYSTEM ANALYSIS AND DESIGN COURSE
  * TAUGHT BY PROFESSOR MCLAUGHLIN. IT IS FOR THE FINAL TEAM PROJECT. THE 
- * PROGRAM IS DESIGNED TO BE A PROBABLE AND USEFUL SOLUTION TO SHARING 
+ * PROGRAM IS DESIGNED TO BE A USEFUL SOLUTION TO SHARING 
  * CODE SECURELY BETWEEN REMOTE HOSTS.
  * 
  * 
@@ -72,8 +72,10 @@ public class CFrame extends JFrame {
 		buttonPanel.buildButtonPanel();
 		frame.add(buttonPanel, BorderLayout.SOUTH);
 		
+		// Center the Frame on Screen
 		frame.setLocationRelativeTo(null);
 		
+		// Make the Frame visible
 		frame.setVisible(true);
 		
 
@@ -81,6 +83,7 @@ public class CFrame extends JFrame {
 		
 	}
 	
+	// Main Builder for the main Frame
 	void buildFrame()
 	{
 		setTitle("CMessager");
