@@ -52,6 +52,7 @@ public class CFrame extends JFrame {
 	static MenuBar menuBar = new MenuBar();
 	static OutScreen outScreen = new OutScreen();
 	static ButtonPanel buttonPanel = new ButtonPanel();
+	static ChatFrame chatFrame = new ChatFrame();
 	
 
 	
@@ -77,6 +78,8 @@ public class CFrame extends JFrame {
 		
 		// Make the Frame visible
 		frame.setVisible(true);
+		
+		chatFrame.buildChatFrame();
 		
 
 		
