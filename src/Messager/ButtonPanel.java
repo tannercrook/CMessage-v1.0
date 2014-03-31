@@ -13,6 +13,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -197,6 +201,13 @@ public class ButtonPanel extends JPanel {
 	                	  * to contact me. 
 	                	  * 
 	                	  */
+	                	 
+	                	 // CREATE DATE FOR ARCHIVING PURPOSES
+	                	 DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd::HH:mm:ss");
+	             			Date date = new Date();
+	             			String time = dateFormat.format(date) + ".txt";
+	                	 
+	                	 
 	                	 try {
 	                		 
 	                		 BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
@@ -211,20 +222,44 @@ public class ButtonPanel extends JPanel {
 	                		 
 	             			String content = out.getOutput();
 	             			String encryptedText = textEncryptor.encrypt(content);
-	              
+	             			
+	             			// UPLOADER FILE
 	             			File file = new File("upload.txt");
+	             			
+	             			// ARCHIVER FILE
+	             			
+	             			
+	             			
 	              
 	             			// if file doesnt exists, then create it
 	             			if (!file.exists()) {
+	             				System.out.println("Creating Upload File");
 	             				file.createNewFile();
 	             			}
+
 	              
+	             			// UPLOAD FILE
 	             			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 	             			BufferedWriter bw = new BufferedWriter(fw);
 	             			bw.write(encryptedText);
 	             			bw.close();
+	             			
+	             			System.out.println("Done writing upload file...");
+	             			
+	             		// Archive Files
+	             			File archFile = new File(time);
+
+	             			System.out.println("Creating Archive File called " + time);
+	             			archFile.createNewFile();
+	             			
+	             			// ARCHIVE FILE
+	             			FileWriter aw = new FileWriter(archFile.getAbsoluteFile());
+	             			BufferedWriter abw = new BufferedWriter(aw);
+	             			abw.write(encryptedText);
+	             			abw.close();
 	              
-	             			System.out.println("Done writing...");
+	             			System.out.println("Done writing archive file...");
+	             			
 	              
 	             		} catch (IOException e2) {
 	             			e2.printStackTrace();
@@ -239,6 +274,7 @@ public class ButtonPanel extends JPanel {
 	             		String username = iUsername;
 	             		String password = iPassword;
 	             		String destFolder = ("/" + iFolder);
+	             		String archFolder = ("/" + iFolder + "/Archives");
 	             		try {
 	             			
 	             			// Upload Download Folder
@@ -248,8 +284,20 @@ public class ButtonPanel extends JPanel {
 	             				JOptionPane.showMessageDialog(null, "Successful Upload");
 	             				System.out.println(filePath + " got sftp-ed successfully to  folder "+destFolder);
 	             				
+	             				
+	             				
 	             				// Archive Folder
-	             				// to be implemented
+	             				String archFilePath = time;
+	             				int archStatus = FTP.sendFile(archFilePath, archFolder, host, username, password);
+	             				if(FileTransferStatus.SUCCESS == status)
+	             				{
+	             					System.out.println(archFilePath + " Got sftp-ed successfully to folder "+archFolder);
+	             				}
+	             				else if(FileTransferStatus.FAILURE == status){
+	             					System.out.println("Fail to ssftp  to  folder "+destFolder);
+	             					JOptionPane.showMessageDialog(null, "ERROR: Could not ARCHIVE. Check your Information.");
+	             				}
+
 	             				
 	             			}
 	             			else if(FileTransferStatus.FAILURE == status){
