@@ -40,6 +40,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -125,8 +126,11 @@ public class MenuBar extends JMenuBar{
 			      {
 			        public void actionPerformed(ActionEvent e)
 			        {
-			          // New file.
-			          System.out.println("Not Functional");
+			          
+			          SimpleFileChooser sfc = new SimpleFileChooser();
+			          sfc.setVisible(true);
+			          
+			          
 
 			        } // End of actionPerformed method.
 			      }); // 

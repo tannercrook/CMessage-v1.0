@@ -79,7 +79,7 @@ public class CFrame extends JFrame {
 		// Make the Frame visible
 		frame.setVisible(true);
 		
-		chatFrame.buildChatFrame();
+		//chatFrame.buildChatFrame();
 		
 
 		
