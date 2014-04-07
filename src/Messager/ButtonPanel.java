@@ -220,7 +220,8 @@ public class ButtonPanel extends JPanel {
 
 							textEncryptor.setPassword(key);
 
-							String content = out.getOutput();
+							String newline = System.getProperty("line.separator");
+							String content = out.getOutput() + newline + "//  Last Modified: " + dateFormat.format(date) + "   by: " + conInfo.getUsername();
 							String encryptedText = textEncryptor.encrypt(content);
 
 							// UPLOADER FILE

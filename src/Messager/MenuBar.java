@@ -59,7 +59,7 @@ public class MenuBar extends JMenuBar{
 	private JMenu connection = new JMenu("Connection");
 	private JMenu help = new JMenu("Help");
 	
-	private JMenuItem menuItemSaveAs  = new JMenuItem("Save As");
+	private JMenuItem menuItemSaveAs  = new JMenuItem("Open/Save");
 	private JMenuItem menuItemSetUp = new JMenuItem("Connect");
 	private JMenuItem menuItemSetKey = new JMenuItem("Set Key");
 	private JMenuItem menuItemGuide = new JMenuItem("User Guide");
